@@ -1,22 +1,11 @@
 import { MenuItem, TextField } from "@mui/material";
 import Alert from "@mui/material/Alert";
-
 import { DataGrid } from "@mui/x-data-grid";
-import Papa from "papaparse";
+
 import { useEffect, useMemo, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-
-// debounce hook
-function useDebounce(value, delay = 300) {
-  const [debounced, setDebounced] = useState(value);
-
-  useEffect(() => {
-    const t = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(t);
-  }, [value, delay]);
-
-  return debounced;
-}
+import { parseCSV } from "./utils/Parsecsv";
+import useDebounce from "./utils/useDebounce";
 
 export default function App() {
   const [rows, setRows] = useState([]);
@@ -30,26 +19,6 @@ export default function App() {
 
   const [genre, setGenre] = useState("");
   const [popularityRange, setPopularityRange] = useState([0, 100]);
-
-  const parseCSV = (filePath) =>
-    new Promise((resolve, reject) => {
-      Papa.parse(filePath, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          if (results.errors?.length) {
-            reject(results.errors);
-            toast.error(err.message || "Failed to load CSV");
-          } else {
-            resolve(results.data);
-          }
-        },
-        error: (err) => (
-          reject(err), toast.error(err.message || "Failed to load CSV")
-        ),
-      });
-    });
 
   const getDataset = async () => {
     setError(null);
@@ -105,18 +74,10 @@ export default function App() {
         },
         { field: "explicit", headerName: "Explicit", width: 150 },
       ]);
-      <Alert variant="filled" severity="success">
-        Dataset loaded successfully
-      </Alert>;
-
-      console.log("Dataset loaded successfully");
     } catch (err) {
-      console.error("CSV Load Error:", err);
-
       setError(err.message || "Failed to load CSV");
     } finally {
       setLoading(false);
-      console.log("Loading complete");
     }
   };
 
@@ -161,7 +122,6 @@ export default function App() {
     getDataset();
   }, []);
 
-  // GENRE OPTIONS
   const genres = useMemo(
     () => [...new Set(rows.map((r) => r.track_genre))],
     [rows]
@@ -187,7 +147,6 @@ export default function App() {
   {
     error && toast.error(error);
   }
-  const notify = () => toast("Wow so easy!");
 
   return (
     <div className="min-h-screen bg-slate-100">
