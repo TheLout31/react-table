@@ -2,6 +2,7 @@ import { Alert, MenuItem, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Papa from "papaparse";
 import { useEffect, useMemo, useState } from "react";
+import CustomToast from "./components/CustomToast";
 
 // debounce hook
 function useDebounce(value, delay = 300) {
@@ -28,41 +29,83 @@ export default function App() {
   const [genre, setGenre] = useState("");
   const [popularityRange, setPopularityRange] = useState([0, 100]);
 
+  const parseCSV = (filePath) =>
+    new Promise((resolve, reject) => {
+      Papa.parse(filePath, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          if (results.errors?.length) {
+            reject(results.errors);
+          } else {
+            resolve(results.data);
+          }
+        },
+        error: (err) => reject(err),
+      });
+    });
+
   const getDataset = async () => {
     setLoading(true);
-    Papa.parse("/spotify_songs.csv", {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        if (results.errors.length) {
-          setError("Failed to parse CSV");
-          setLoading(false);
-          return;
+    setError(null);
+
+    try {
+      const data = await parseCSV("/spotify_songs.csv");
+
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error("CSV file is empty");
+      }
+
+      const formattedRows = data.map((row, i) => {
+        const popularity = Number(row.popularity);
+
+        if (Number.isNaN(popularity)) {
+          throw new Error("Invalid popularity value in dataset");
         }
 
-        const formattedRows = results.data.map((row, i) => ({
+        return {
           id: i,
           ...row,
-          popularity: Number(row.popularity),
-        }));
+          popularity,
+        };
+      });
 
-        setRows(formattedRows);
+      setRows(formattedRows);
 
-        setColumns([
-          { field: "track_name", headerName: "Track", flex: 1 },
-          { field: "artists", headerName: "Artist", flex: 1 },
-          { field: "track_genre", headerName: "Genre", width: 150 },
-          {
-            field: "popularity",
-            headerName: "Popularity",
-            type: "number",
-            width: 130,
-          },
-        ]);
-        setLoading(false);
-      },
-    });
+      setColumns([
+        { field: "track_name", headerName: "Track", flex: 1 },
+        { field: "artists", headerName: "Artist", flex: 1 },
+        { field: "track_genre", headerName: "Genre", width: 150 },
+        {
+          field: "popularity",
+          headerName: "Popularity",
+          type: "number",
+          width: 130,
+        },
+      ]);
+      CustomToast({
+        severity: "success",
+        message: "Dataset loaded successfully",
+      });
+
+      console.log("Dataset loaded successfully");
+    } catch (err) {
+      console.error("CSV Load Error:", err);
+
+      setError(err.message || "Failed to load CSV");
+
+      CustomToast({
+        severity: "error",
+        message: err.message || "Failed to parse CSV",
+      });
+    } finally {
+      setLoading(false);
+      CustomToast({
+        severity: "success",
+        message: "successfully loaded",
+      });
+    }
   };
 
   useEffect(() => {
