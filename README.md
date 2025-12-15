@@ -1,16 +1,121 @@
-# React + Vite
+#📊 Spotify Songs Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React.js dashboard that loads and visualizes a large Spotify songs dataset from a CSV file.
+The app provides searching, sorting, filtering, and pagination using MUI X DataGrid, with CSV parsing handled by PapaParse and a responsive UI styled with Tailwind CSS.
 
-Currently, two official plugins are available:
+#🚀 Features
+📁 CSV Data Handling
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Loads Spotify dataset from a local CSV file
 
-## React Compiler
+Parses data using PapaParse
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Strong error handling for:
 
-## Expanding the ESLint configuration
+Empty files
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Invalid values
+
+Parsing errors
+
+Displays loading state using DataGrid’s built-in loader
+
+#🔍 Search & Filtering
+
+Global search across track name and artist
+
+Debounced search (300ms) for better performance
+
+Genre filter (dropdown)
+
+Popularity range filter (min & max)
+
+Filters work together using AND logic
+
+#🔃 Sorting
+
+Single-column sorting
+
+Default sort by popularity (descending)
+
+Supports numeric & string sorting
+
+Visual indicators via DataGrid headers
+
+#📑 Data Table
+
+Built with MUI X DataGrid
+
+Pagination with selectable page sizes
+
+Responsive layout
+
+Compact density for large datasets
+
+Styled headers and modern UI
+
+#🎨 UI & UX
+
+Tailwind CSS for layout and responsiveness
+
+Gradient header
+
+Clean filter bar layout
+
+Search activity indicator
+
+Error and success alerts using MUI
+
+#🛠 Tech Stack
+
+React.js
+
+MUI X DataGrid
+
+PapaParse
+
+Tailwind CSS
+
+JavaScript (ES6+)
+
+#⚙️ Installation & Setup
+1️⃣ Clone the repository
+git clone https://github.com/your-username/spotify-dashboard.git
+cd spotify-dashboard
+
+2️⃣ Install dependencies
+npm install
+
+3️⃣ Add the CSV file
+
+Place spotify_songs.csv inside the public folder.
+
+4️⃣ Start the app
+npm run dev
+
+#📄 CSV Dataset
+
+Dataset source:
+30,000 Spotify Songs Dataset (Kaggle)
+
+Make sure the CSV contains columns like:
+
+track_name
+
+artists
+
+track_genre
+
+popularity
+
+album_name
+
+tempo
+
+energy
+
+danceability
+
+duration_ms
+
+explicit
