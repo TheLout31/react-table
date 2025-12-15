@@ -1,9 +1,10 @@
-#📊 Spotify Songs Dashboard
+### 📊 Spotify Songs Dashboard
 
 A modern React.js dashboard that loads and visualizes a large Spotify songs dataset from a CSV file.
 The app provides searching, sorting, filtering, and pagination using MUI X DataGrid, with CSV parsing handled by PapaParse and a responsive UI styled with Tailwind CSS.
 
-#🚀 Features
+## 🚀 Features
+
 📁 CSV Data Handling
 
 Loads Spotify dataset from a local CSV file
@@ -20,7 +21,7 @@ Parsing errors
 
 Displays loading state using DataGrid’s built-in loader
 
-#🔍 Search & Filtering
+## 🔍 Search & Filtering
 
 Global search across track name and artist
 
@@ -32,7 +33,7 @@ Popularity range filter (min & max)
 
 Filters work together using AND logic
 
-#🔃 Sorting
+## 🔃 Sorting
 
 Single-column sorting
 
@@ -42,7 +43,7 @@ Supports numeric & string sorting
 
 Visual indicators via DataGrid headers
 
-#📑 Data Table
+## 📑 Data Table
 
 Built with MUI X DataGrid
 
@@ -54,7 +55,7 @@ Compact density for large datasets
 
 Styled headers and modern UI
 
-#🎨 UI & UX
+## 🎨 UI & UX
 
 Tailwind CSS for layout and responsiveness
 
@@ -66,7 +67,7 @@ Search activity indicator
 
 Error and success alerts using MUI
 
-#🛠 Tech Stack
+## 🛠 Tech Stack
 
 React.js
 
@@ -76,46 +77,36 @@ PapaParse
 
 Tailwind CSS
 
+Toastify
+
 JavaScript (ES6+)
 
-#⚙️ Installation & Setup
+## ⚙️ Installation & Setup
+
 1️⃣ Clone the repository
+
+```bash
 git clone https://github.com/your-username/spotify-dashboard.git
 cd spotify-dashboard
+```
 
 2️⃣ Install dependencies
+
+```bash
 npm install
+```
 
 3️⃣ Add the CSV file
 
 Place spotify_songs.csv inside the public folder.
 
 4️⃣ Start the app
-npm run dev
 
-#📄 CSV Dataset
+```bash
+npm run dev
+```
+
+## 📄 CSV Dataset
 
 Dataset source:
 30,000 Spotify Songs Dataset (Kaggle)
-
-Make sure the CSV contains columns like:
-
-track_name
-
-artists
-
-track_genre
-
-popularity
-
-album_name
-
-tempo
-
-energy
-
-danceability
-
-duration_ms
-
-explicit
