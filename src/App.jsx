@@ -1,9 +1,10 @@
-import { Alert, MenuItem, TextField } from "@mui/material";
+import { MenuItem, TextField } from "@mui/material";
+import Alert from "@mui/material/Alert";
+
 import { DataGrid } from "@mui/x-data-grid";
 import Papa from "papaparse";
 import { useEffect, useMemo, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import CustomToast from "./components/CustomToast";
+import { ToastContainer, toast } from "react-toastify";
 
 // debounce hook
 function useDebounce(value, delay = 300) {
@@ -32,7 +33,7 @@ export default function App() {
 
   const parseCSV = (filePath) =>
     new Promise((resolve, reject) => {
-      Papa.parse(filePath, {
+      Papaparse(filePath, {
         download: true,
         header: true,
         skipEmptyLines: true,
@@ -116,9 +117,6 @@ export default function App() {
     } finally {
       setLoading(false);
       console.log("Loading complete");
-      <Alert severity="error" className="mb-4">
-        {err.message || "Failed to parse CSV"}
-      </Alert>;
     }
   };
 
@@ -155,7 +153,6 @@ export default function App() {
 
       toast.success("CSV exported successfully");
     } catch (err) {
-      console.error("CSV Export Error:", err);
       toast.error("Failed to export CSV");
     }
   };
@@ -188,16 +185,14 @@ export default function App() {
   }, [rows, debouncedSearch, genre, popularityRange]);
 
   {
-    error && (
-      <Alert severity="error" className="mb-4">
-        {error}
-      </Alert>
-    );
+    error && toast.error(error);
   }
+  const notify = () => toast("Wow so easy!");
 
   return (
     <div className="min-h-screen bg-slate-100">
       {/* HEADER */}
+      <ToastContainer />
       <header className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-6">
         <h1 className="text-3xl font-bold">Spotify Dashboard 🎧</h1>
         <p className="text-green-100 mt-1">Search, sort & filter songs</p>
