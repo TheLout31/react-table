@@ -2,6 +2,7 @@ import { Alert, MenuItem, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Papa from "papaparse";
 import { useEffect, useMemo, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import CustomToast from "./components/CustomToast";
 
 // debounce hook
@@ -20,7 +21,7 @@ export default function App() {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // FILTER STATES
   const [search, setSearch] = useState("");
@@ -38,16 +39,18 @@ export default function App() {
         complete: (results) => {
           if (results.errors?.length) {
             reject(results.errors);
+            toast.error(err.message || "Failed to load CSV");
           } else {
             resolve(results.data);
           }
         },
-        error: (err) => reject(err),
+        error: (err) => (
+          reject(err), toast.error(err.message || "Failed to load CSV")
+        ),
       });
     });
 
   const getDataset = async () => {
-    setLoading(true);
     setError(null);
 
     try {
@@ -110,17 +113,12 @@ export default function App() {
       console.error("CSV Load Error:", err);
 
       setError(err.message || "Failed to load CSV");
-
-      CustomToast({
-        severity: "error",
-        message: err.message || "Failed to parse CSV",
-      });
     } finally {
       setLoading(false);
-      CustomToast({
-        severity: "success",
-        message: "successfully loaded",
-      });
+      console.log("Loading complete");
+      <Alert severity="error" className="mb-4">
+        {err.message || "Failed to parse CSV"}
+      </Alert>;
     }
   };
 
@@ -151,11 +149,11 @@ export default function App() {
     });
   }, [rows, debouncedSearch, genre, popularityRange]);
 
-  if (error) {
-    return (
-      <div className="p-6">
-        <Alert severity="error">{error}</Alert>
-      </div>
+  {
+    error && (
+      <Alert severity="error" className="mb-4">
+        {error}
+      </Alert>
     );
   }
 
@@ -228,6 +226,13 @@ export default function App() {
               rows={filteredRows}
               columns={columns}
               loading={loading}
+              slots={{
+                loadingOverlay: () => (
+                  <div className="flex items-center justify-center h-full text-gray-500">
+                    Loading data...
+                  </div>
+                ),
+              }}
               pageSizeOptions={[5, 10, 25]}
               initialState={{
                 pagination: { paginationModel: { pageSize: 10, page: 0 } },
