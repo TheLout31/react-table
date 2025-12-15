@@ -122,6 +122,44 @@ export default function App() {
     }
   };
 
+  const exportToCSV = () => {
+    try {
+      if (!filteredRows.length) {
+        toast.error("No data to export");
+        return;
+      }
+
+      const exportData = filteredRows.map(({ id, ...rest }) => rest);
+
+      const csv = Papa.unparse(exportData, {
+        quotes: true,
+        delimiter: ",",
+        header: true,
+        skipEmptyLines: true,
+      });
+
+      const blob = new Blob([csv], {
+        type: "text/csv;charset=utf-8;",
+      });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.setAttribute("download", "spotify_filtered_data.csv");
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast.success("CSV exported successfully");
+    } catch (err) {
+      console.error("CSV Export Error:", err);
+      toast.error("Failed to export CSV");
+    }
+  };
+
   useEffect(() => {
     getDataset();
   }, []);
@@ -218,6 +256,15 @@ export default function App() {
             🔍 Searching for: <strong>{debouncedSearch}</strong>
           </div>
         )}
+
+        <div className="flex justify-end">
+          <button
+            onClick={exportToCSV}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg shadow transition"
+          >
+            ⬇ Export CSV
+          </button>
+        </div>
 
         {/* TABLE */}
         <div className="bg-white rounded-xl shadow-lg p-4">
