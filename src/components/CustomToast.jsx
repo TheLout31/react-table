@@ -1,9 +1,21 @@
 import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
-export default function CustomToast({ severity, message }) {
+export default function CustomToast({ severity = "info", message, onClose }) {
   return (
-    <Alert variant="filled" severity={severity}>
-      {message}
-    </Alert>
+    <Snackbar
+      autoHideDuration={3000}
+      onClose={onClose}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+    >
+      <Alert
+        variant="filled"
+        severity={severity}
+        onClose={onClose}
+        sx={{ width: "100%" }}
+      >
+        {message}
+      </Alert>
+    </Snackbar>
   );
 }

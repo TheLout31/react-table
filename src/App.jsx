@@ -72,22 +72,38 @@ export default function App() {
       });
 
       setRows(formattedRows);
+      console.log(formattedRows);
 
       setColumns([
-        { field: "track_name", headerName: "Track", flex: 1 },
-        { field: "artists", headerName: "Artist", flex: 1 },
+        { field: "track_name", headerName: "Track", width: 200 },
+        { field: "artists", headerName: "Artist", width: 200 },
         { field: "track_genre", headerName: "Genre", width: 150 },
         {
           field: "popularity",
           headerName: "Popularity",
           type: "number",
-          width: 130,
+          width: 150,
         },
+        { field: "album_name", headerName: "Album", width: 300 },
+        { field: "tempo", headerName: "Tempo", type: "number", width: 150 },
+        { field: "energy", headerName: "Energy", type: "number", width: 150 },
+        {
+          field: "danceability",
+          headerName: "Danceability",
+          type: "number",
+          width: 150,
+        },
+        {
+          field: "duration_ms",
+          headerName: "Duration (ms)",
+          type: "number",
+          width: 150,
+        },
+        { field: "explicit", headerName: "Explicit", width: 150 },
       ]);
-      CustomToast({
-        severity: "success",
-        message: "Dataset loaded successfully",
-      });
+      <Alert variant="filled" severity="success">
+        Dataset loaded successfully
+      </Alert>;
 
       console.log("Dataset loaded successfully");
     } catch (err) {
