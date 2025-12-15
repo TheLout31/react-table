@@ -33,7 +33,7 @@ export default function App() {
 
   const parseCSV = (filePath) =>
     new Promise((resolve, reject) => {
-      Papaparse(filePath, {
+      Papa.parse(filePath, {
         download: true,
         header: true,
         skipEmptyLines: true,
