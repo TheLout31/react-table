@@ -1,7 +1,6 @@
 import { MenuItem, TextField } from "@mui/material";
-import Alert from "@mui/material/Alert";
 import { DataGrid } from "@mui/x-data-grid";
-
+import Papa from "papaparse";
 import { useEffect, useMemo, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { parseCSV } from "./utils/Parsecsv";
@@ -45,7 +44,6 @@ export default function App() {
       });
 
       setRows(formattedRows);
-      console.log(formattedRows);
 
       setColumns([
         { field: "track_name", headerName: "Track", width: 200 },
